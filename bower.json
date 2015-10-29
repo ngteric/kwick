@@ -1,0 +1,18 @@
+{
+  "name": "kwick",
+  "authors": [
+    "ngeric <nongeric@gmail.com>"
+  ],
+  "description": "Chat instantané Kwick",
+  "main": "",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "polymer": "Polymer/polymer#1.1.0",
+    "Materialize": "materialize#~0.97.1"
+  }
+}

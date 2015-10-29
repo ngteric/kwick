@@ -1,0 +1,51 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="../css/jquery.scrollbar.css">
+        <link rel="stylesheet" href="../bower_components/Materialize/dist/css/materialize.min.css">
+        <link rel="stylesheet" href="../css/normalize.min.css">
+        <link rel="stylesheet" href="../css/main.css">
+
+        <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header class="z-depth-1">
+        </header>
+        <div class="wrapper">
+            <div class="card messenger">
+                <div class="card-content">
+                    <span class="card-title black-text"></span>
+                    <div id="msg-box" class="collection scrollbar-macosx"></div>
+                </div>
+                    <form id="form-message" class="container">
+                        <input type="text" id="msg" name="msg" class="msg" maxlength="140">
+                        <button type="submit" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">send</i></button>
+                    </form>
+            </div>
+        </div>
+       <button id="logout" class="waves-effect waves-teal btn">Logout</button>
+         
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="C:/Users/Eric/project/javascript/jmpp/kwick/bower_components/jquery/dist/jquery-1.11.2.min.js"><\/script>')</script>
+        <script src="../bower_components/Materialize/dist/js/materialize.min.js"></script>
+        <script src="../js/vendor/jquery.scrollbar.min.js"></script>
+        <script src="../js/app.js"></script>
+        <script src="../js/kwickjs/messenger.js"></script>
+        <script>
+        jQuery(document).ready(function(){
+            jQuery('.scrollbar-macosx').scrollbar();
+        });
+        </script>
+    </body>
+</html>
