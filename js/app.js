@@ -6,7 +6,6 @@
 	var kwick = {
 		msgPushIndex : 0,
 		msgTab : [],
-
 		userTab : [],
 		FirstTimeRefresh : true,
 
@@ -16,19 +15,24 @@
 				url : API_ROOT_URL + url,
 				dataType : 'jsonp'
 			});
+			// for the preloader
+			request.always(function() {
+				$('#preloader').show();
+			});
 
-			// En cas d'erreur ...
+			// if fail
 			request.fail(function(jqXHR, textStatus, errorThrown){
 				callback(textStatus, null);
 			});
-			// En cas de success ...
+
+			// if done
 			request.done(function(data){
+				$('#preloader').hide();
 				callback(null, data);
 			});
+
 		},
 	}
-
-	
 
 window.kwick = kwick;
 

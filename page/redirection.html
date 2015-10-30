@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="../css/jquery.scrollbar.css">
         <link rel="stylesheet" href="../bower_components/Materialize/dist/css/materialize.min.css">
         <link rel="stylesheet" href="../css/normalize.min.css">
@@ -20,41 +21,26 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <header class="z-depth-1">
+        <div class="progress">
+            <div class="indeterminate red"></div>
+        </div>
         </header>
         <div class="wrapper">
-            <div class="card messenger">
-                <h1 class="card-title title black-text">Kwick messaging</h1>
-                <div class="card-content">
-                    <span class="card-title userlist black-text"></span>
-                    <button id="logout" class="waves-effect waves-blue btn">logout</button>
-                    <div class="parent">
-                        <div id="previous"><button class="chip black previous-btn white-text">Previous message</button></div>
-                        <div id="msg-box" class="collection scrollbar-macosx"></div>
-                    </div>
-                    
-                </div>
-                <form id="form-message" class="container">
-                    <input type="text" id="msg" name="msg" class="msg" length="140" maxlength="140" placeholder="Write your message">
-                    <button type="submit" class="btn-floating btn-large waves-effect waves-light orange accent-2"><i class="material-icons">send</i></button>
-                </form>
+            <div class="card panel error red white-text">
+                You are not allow to access at this page, redirection to the home :x ...
             </div>
+            
         </div>
-        <audio id="audio"></audio>
-        <div id="preloader" class="progress">
-            <div class="indeterminate"></div>
-        </div>
-
+         
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="C:/Users/Eric/project/javascript/jmpp/kwick/bower_components/jquery/dist/jquery-1.11.2.min.js"><\/script>')</script>
         <script src="../bower_components/Materialize/dist/js/materialize.min.js"></script>
         <script src="../js/vendor/jquery.scrollbar.min.js"></script>
-        <script src="../js/vendor/jquery.jWebAudio.min.js"></script>
         <script src="../js/app.js"></script>
-        <script src="../js/kwickjs/messenger.js"></script>
         <script>
-        jQuery(document).ready(function(){
-            jQuery('.scrollbar-macosx').scrollbar();
-        });
+            setInterval(function(){
+                document.location.href="../index.html";
+            },7000);
         </script>
     </body>
 </html>

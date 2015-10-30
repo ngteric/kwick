@@ -4,8 +4,25 @@ kwick.messenger = function(cb){
 	var user_token = localStorage.getItem("user_token");
 	var user_id = localStorage.getItem("user_id");
 	var user_name = localStorage.getItem("user_name");
-	
-	// Call user list connected...
+	var message = localStorage.getItem("message");
+
+	//If not logged redirection to home...
+	if(user_token === null && user_id === null){
+		document.location.href="../page/redirection.html";
+	}
+	// Welcome message
+	 Materialize.toast( message, 7000,'center');
+
+	// Preload sound
+	var canPlayAudio = false;
+	$('#audio').jWebAudio('addSoundSource', {
+	    'url': '../sound/message.mp3'
+	});
+    $('#audio').jWebAudio('load', function() {
+        canPlayAudio = true;
+    });
+
+	// function call API for user list connected
 	function userListConnected(user_token){
 		kwick.callKwickAPI('user/logged/'+ user_token ,function(err,data){
 			if(err)
@@ -24,6 +41,7 @@ kwick.messenger = function(cb){
 					}
 					if(userConnected == true){
 						Materialize.toast( data.result.user[u] + '  is connected', 4000);
+						soundNotification();
 					}
 				}
 			}
@@ -39,20 +57,25 @@ kwick.messenger = function(cb){
 					}
 					if(userDisconnected == true){
 						Materialize.toast( kwick.userTab[u] + '  is disconnected', 4000);
+						soundNotification();
 					}
 				}
 			}
 
 			kwick.userTab = [];
+			$('.userlist').empty();
 			for (var i = 0; i < data.result.user.length; i++) {
-				kwick.userTab.push('<p class="chip lime white-text">' + data.result.user[i] + '</p>');
+				kwick.userTab.push(data.result.user[i]);
+				$('.userlist').append('<p class="chip lime white-text">' + kwick.userTab[i]  + '</p>');
 			}
-			$('.card-title').empty().append(kwick.userTab);
+			
 			kwick.firstTimeRefresh = false;
 		});
 	}
 	userListConnected(user_token,0);
-	// Call deconnection button
+
+
+	// function call API for disconnect button
 	function logout(user_token,user_id){
 		kwick.callKwickAPI('logout/'+ user_token + '/' + user_id,function(err,data){
 			if(err)
@@ -65,11 +88,12 @@ kwick.messenger = function(cb){
 		});
 	}
 
+	// Action for disconnect button
 	$('#logout').on('click', function(){
 		logout(user_token,user_id);
 	});
 
-	// Call Send message 
+	// function call API to send a message 
 	function sendMessage(user_token, user_id, message){
 		kwick.callKwickAPI('say/' + user_token + '/' + user_id +'/' + message,function(err,data){
 			if(err)
@@ -80,49 +104,83 @@ kwick.messenger = function(cb){
 	$('#form-message').on('submit', function(event){
 		event.preventDefault();
 		var message = $('#msg').val();
-		if(message.length < 140){
+
+		if(message.length < 140 && message !== ''){
 			var messageEncode = encodeURIComponent(message);
 			sendMessage(user_token, user_id, messageEncode);
 			$('#msg').val('');
-			ShowMessage(user_token,kwick.msgPushIndex);
-		}
-		
+			ShowMessage(user_token,kwick.msgTab.length);
+		}	
 	});	
 
-	// Call show message
+	// function call API to show message list
 	function ShowMessage(user_token, index){
 		kwick.callKwickAPI('talk/list/' + user_token + '/' + 0,function(err,data){
 			if(err)
 				console.log('fail');
 
 			var compteur = 0;
-
-			for (var i = index; i < data.result.talk.length; i++) {
+			kwick.msgTab = [];
+			for (var i = data.result.talk.length - index; i < data.result.talk.length; i++) {
+				// Convert timestamp
 				var date = new Date(data.result.talk[i].timestamp* 1000).toLocaleTimeString();
-				kwick.msgTab.push('<div class="collection-item avatar"><i class="material-icons circle">assignment_ind</i><span class="title">'+ data.result.talk[i].user_name +'</span><p>' + data.result.talk[i].content+'</br><span class="time">'+ date +'</span></p></div>');
+				kwick.msgTab.push(messageForm(data.result.talk[i].user_name,data.result.talk[i].content,date));
 			}
-
+			$('#msg-box').empty().append(kwick.msgTab);
+			
 			if(kwick.msgPushIndex < data.result.talk.length){
 				compteur = data.result.talk.length - kwick.msgPushIndex;
-				$('#msg-box').empty().append(kwick.msgTab);
 				$('#msg-box').scrollTop(10000000000);
 				if(kwick.msgPushIndex !== 0 && data.result.talk[data.result.talk.length - 1].user_name !== user_name){
 					Materialize.toast( compteur +' new message', 4000);
+					soundNotification();
 				}
 			}
 			kwick.msgPushIndex = data.result.talk.length;
 		});
 	}
-	ShowMessage(user_token,0);
+	ShowMessage(user_token,15);
+
+	// Message Format
+	function messageForm(name,message,date){
+		if(name == user_name){
+			return '<div class="messageForm clearfix"><p class="userbubble z-depth-1 orange accent-2 white-text">' +message +'</p><i class="dateForm right">'+date+'</i></div>';
+		}
+		return '<div class="messageForm clearfix"><span class="chip msg-chip lime white-text left">' + name +'</span>'+'<p class="bubble clearfix z-depth-1">'+  message +'</p><i class="dateForm left">'+date+'</i></div>';
+	}
+
 	// Refresh interval message & user connected
 	function refresh(){
 		setInterval(function(){ 
-			ShowMessage(user_token,kwick.msgPushIndex);
+			ShowMessage(user_token,kwick.msgTab.length);
 			userListConnected(user_token);
-		}, 5000);
-
+		}, 7000);
 	}
 	refresh();
+
+	// load 15 previous message ...
+	function lazyload(){
+		$('#msg-box').on('scroll',function(){
+			if($('#msg-box').scrollTop() == 0){
+				$('#previous').show();
+			}
+			else{
+				$('#previous').hide();
+			}
+		});
+		$('#previous').on('click',function(){
+			$('#msg-box').append('<div id="preloader" class="progress"><div class="indeterminate"></div></div>');
+			ShowMessage(user_token,kwick.msgTab.length + 15);
+		});
+	}
+	lazyload();
+
+	// Sound notification
+	function soundNotification(){
+		if (canPlayAudio)
+			$('#audio').jWebAudio('play');		    
+	}
+	
 }
 
 kwick.messenger(function(){
